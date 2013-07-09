@@ -155,6 +155,21 @@ class PHPFormHelper
 						}
 					}
 					break;
+
+				case 'select':
+					$label = $name;
+					if (isset($options['label'])) $label = $options['label'];
+					if (isset($options['required']) && !isset($_POST[$name]))
+					{
+						if (!isset($this->errors[$name]))
+							$this->errors[$name] = $label.' is required.<br>';
+					}
+					if (isset($_POST[$name]) && !array_key_exists($_POST[$name], $options['options']))
+					{
+						if (!isset($this->errors[$name]))
+							$this->errors[$name] = 'Please select a valid value for '.$label.'.<br>';
+					}
+					break;					
 					
 			}
 		}
@@ -248,6 +263,7 @@ class PHPFormHelper
 					else echo ' value=""';
 					if (isset($options['max'])) echo ' maxlength="'.$options['max'].'"';
 					if (isset($options['class'])) echo ' class="'.$options['class'].'"';
+					if (isset($options['size'])) echo ' size="'.$options['size'].'"';
 				echo '>';
 				if (isset($this->errors[$name])) echo '<span class="help-inline">'.$this->errors[$name].'</span>';
 			echo '</div>';
